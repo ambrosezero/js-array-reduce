@@ -42,14 +42,8 @@ Examples:
 */
 
 function vowelCount(str) {
-    // Array.from(str.toLowerCase())
-    let strArr = Array.from(str.toLowerCase());
-    return strArr.reduce((acc, letter) => {
-        // ??????? the below line seems to know that letter is the letter being passed to it, but the next line
-        //  line reads letter as its own word, not the variable being passed into the function. ??????
-        console.log(letter)
-        return { ...acc, letter: (acc.letter || 0) + 1 };
-    }, {})
+    let strArr = Array.from(str.toLowerCase()).filter((ltr) => { return ltr == 'a' || ltr == 'e' || ltr == 'i' || ltr == 'o' || ltr == 'u' })
+    return strArr.reduce((acc, letter) => { return { ...acc, [letter]: (acc[letter] || 0) + 1 }; }, {})
 }
 
 
@@ -73,10 +67,7 @@ Examples:
 
 function addKeyAndValue(arr, key, value) {
     return arr.reduce((accum, obj) => {
-        // ?????? the following console.log actually uses the word key for the key, instead of pulling it from 
-        // the function arguments, as the variable value does. why is this???????
-        console.log({ ...obj, key: value })
-        return [...accum, { ...obj, key: value }]
+        return [...accum, { ...obj, [key]: value }]
     }, [])
 }
 
@@ -108,112 +99,117 @@ Examples:
     partition(names, isLongerThanThreeCharacters) // [['Elie', 'Colt', 'Matt'], ['Tim']]
 */
 
-function partition(arr, callback) { }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// BELOW IS NOT PART OF THE ASSIGNMENT 
-// 
-// 
-
-const people = [
-    { id: 1, name: "Leigh", age: 35 },
-    { id: 2, name: "Jenny", age: 30 },
-    { id: 3, name: "Heather", age: 28 },
-];
-
-let result;
-
-
-result = people.reduce((acc, person) => acc + 1, 0);
-
-result = people.reduce((acc, person) => acc + person.age, 0);
-
-result = people.reduce((acc, person) => [...acc, person.name], []);
-
-result = people.reduce((acc, person) => { return { ...acc, [person.id]: person } }, {})
-
-
-result = people.reduce((acc, person) => {
-    if (acc < person.age || acc === null) return person.age;
-    // ????? WHY DOES THIS NOT WORK IF I DONT return acc AS IN THE FOLLOWING LINE, WHEN I DONT NEED TO RETURN IN SOME 
-    // ABOVE FUNCTIONS?????
-    return acc
-}, null)
-
-// find by name
-
-result = people.reduce((acc, person) => {
-    if (acc !== null) return acc;
-    if (person.name === "Jenny") return person;
-    return null
-}, null)
-
-// check if all over 18
-
-result = people.reduce((acc, person) => {
-    if (!acc) return false;
-    return person.age > 18;
-}, true)
-
-// check if any over 18
-
-result = people.reduce((acc, person) => {
-    if (acc) return acc
-    return person.age > 18;
-}, false)
-
-
-
-const orders = [
-    { id: "1", status: "pending" },
-    { id: "2", status: "pending" },
-    { id: "3", status: "cancelled" },
-    { id: "4", status: "shipped" },
-]
-
-// count occurences
-
-// the following creates an object where each key is one of the status types in orders, 
-// and that keys value is the number of incidents of that particular status type in orders 
-result = orders.reduce((acc, order) => {
-    // QUESTION 1) why does [order.status] give us two different values below? in the first case, it gives us the key,
-    // and in the second case, it gives us that keys value
-    // QUESTION 2)  why does OR work in this way? isn't OR a boolean operator? in this case, it returns one 
-    // of two real values.
-    return { ...acc, [order.status]: (acc[order.status] || 0) + 1 }
-}
-    , {})
-
-
-const folders = [
-    "index.js",
-    ["flatten.js", "maps.js"],
-    ["any.js", ["all.js", "count.js"]]
-]
-
-
-// QUESTION why is it neccessary to pass in the second reduce through a function?
-function flatten(acc, item) {
-    if (Array.isArray(item)) {
-        return [...acc, ...item.reduce(flatten, [])];
-    }
-    return [...acc, item];
+function partition(arr, callback) {
+    return arr.reduce((accum, value) => {
+        if (callback(value)) { accum[0].push(value); return accum };
+        accum[1].push(value); return accum;
+    }, [[], []])
 }
 
-result = folders.reduce(flatten, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // BELOW IS NOT PART OF THE ASSIGNMENT 
+// // 
+// // 
+
+// const people = [
+//     { id: 1, name: "Leigh", age: 35 },
+//     { id: 2, name: "Jenny", age: 30 },
+//     { id: 3, name: "Heather", age: 28 },
+// ];
+
+// let result;
+
+
+// result = people.reduce((acc, person) => acc + 1, 0);
+
+// result = people.reduce((acc, person) => acc + person.age, 0);
+
+// result = people.reduce((acc, person) => [...acc, person.name], []);
+
+// result = people.reduce((acc, person) => { return { ...acc, [person.id]: person } }, {})
+
+
+// result = people.reduce((acc, person) => {
+//     if (acc < person.age || acc === null) return person.age;
+//     // ????? WHY DOES THIS NOT WORK IF I DONT return acc AS IN THE FOLLOWING LINE, WHEN I DONT NEED TO RETURN IN SOME 
+//     // ABOVE FUNCTIONS?????
+//     return acc
+// }, null)
+
+// // find by name
+
+// result = people.reduce((acc, person) => {
+//     if (acc !== null) return acc;
+//     if (person.name === "Jenny") return person;
+//     return null
+// }, null)
+
+// // check if all over 18
+
+// result = people.reduce((acc, person) => {
+//     if (!acc) return false;
+//     return person.age > 18;
+// }, true)
+
+// // check if any over 18
+
+// result = people.reduce((acc, person) => {
+//     if (acc) return acc
+//     return person.age > 18;
+// }, false)
+
+
+
+// const orders = [
+//     { id: "1", status: "pending" },
+//     { id: "2", status: "pending" },
+//     { id: "3", status: "cancelled" },
+//     { id: "4", status: "shipped" },
+// ]
+
+// // count occurences
+
+// // the following creates an object where each key is one of the status types in orders, 
+// // and that keys value is the number of incidents of that particular status type in orders 
+// result = orders.reduce((acc, order) => {
+//     // QUESTION 1) why does [order.status] give us two different values below? in the first case, it gives us the key,
+//     // and in the second case, it gives us that keys value
+//     // QUESTION 2)  why does OR work in this way? isn't OR a boolean operator? in this case, it returns one 
+//     // of two real values.
+//     return { ...acc, [order.status]: (acc[order.status] || 0) + 1 }
+// }
+//     , {})
+
+
+// const folders = [
+//     "index.js",
+//     ["flatten.js", "maps.js"],
+//     ["any.js", ["all.js", "count.js"]]
+// ]
+
+
+// // QUESTION why is it neccessary to pass in the second reduce through a function?
+// function flatten(acc, item) {
+//     if (Array.isArray(item)) {
+//         return [...acc, ...item.reduce(flatten, [])];
+//     }
+//     return [...acc, item];
+// }
+
+// result = folders.reduce(flatten, []);
 
 
 
