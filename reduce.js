@@ -45,8 +45,8 @@ function vowelCount(str) {
     // Array.from(str.toLowerCase())
     let strArr = Array.from(str.toLowerCase());
     return strArr.reduce((acc, letter) => {
-        // ??????? the below line seems to know that letter is the letter being passed to it, 
-        // ??????? but the next line reads letter as its own word, not the variable being passed into the function. 
+        // ??????? the below line seems to know that letter is the letter being passed to it, but the next line
+        //  line reads letter as its own word, not the variable being passed into the function. ??????
         console.log(letter)
         return { ...acc, letter: (acc.letter || 0) + 1 };
     }, {})
@@ -72,8 +72,9 @@ Examples:
 */
 
 function addKeyAndValue(arr, key, value) {
-    // let keyValuePair = {key: value}
     return arr.reduce((accum, obj) => {
+        // ?????? the following console.log actually uses the word key for the key, instead of pulling it from 
+        // the function arguments, as the variable value does. why is this???????
         console.log({ ...obj, key: value })
         return [...accum, { ...obj, key: value }]
     }, [])
